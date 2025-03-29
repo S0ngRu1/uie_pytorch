@@ -286,11 +286,9 @@ def extract_and_convert(input_dir, output_dir, verbose=False):
     weight_map.update(build_params_map(
         'ernie', attention_num=config['num_hidden_layers']))
     if paddle_installed:
-        import paddle.fluid.dygraph as D
-        from paddle import fluid
-        with fluid.dygraph.guard():
-            paddle_paddle_params, _ = D.load_dygraph(
-                os.path.join(input_dir, 'model_state'))
+        with paddle.base.dygraph.guard():
+            paddle_paddle_params = pickle.load(
+            open(os.path.join(input_dir, 'model_state.pdparams'), 'rb'))
     else:
         paddle_paddle_params = pickle.load(
             open(os.path.join(input_dir, 'model_state.pdparams'), 'rb'))
